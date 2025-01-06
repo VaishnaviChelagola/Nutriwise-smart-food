@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics</title>
+    <link rel="stylesheet" href="{% static 'recommendations/statistics.css' %}">i
+
+</head>
+<body>
+    <div>
+        <a  href="http://127.0.0.1:8000/nutriwise/" class="nutriwise-button">Go to Nutriwise</a>
+    </div>
+    
+<div class="background">
+    <div class="container">
+        <div class="row">
+            <!-- Daily Goals Box -->
+            <div class="box">
+                <h2>Daily Goals</h2>
+                <div class="inner-box">
+                    <div class="table">
+                        <div class="column left">
+                            <p>CALORIES</p>
+                            <p>PROTEINS</p>
+                            <p>CARBS</p>
+                            <p>FATS</p>
+                            <p><b>TOTAL INTAKE</b></p>
+                        </div>
+                        <div class="column right">
+                            <p>{{ user_profile.calorie_goal|default:"0" }} kcal</p>
+                            <p>{{ user_profile.protein_goal|default:"0" }} g</p>
+                            <p>{{ user_profile.carbs_goal|default:"0" }} g</p>
+                            <p>{{ user_profile.fats_goal|default:"0" }} g</p>
+                            <p><b>{{ total_goals|floatformat:2 }} g</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consumed Goals Box -->
+            <div class="box">
+                <h2>Consumed </h2>
+                <div class="inner-box">
+                    <div class="table">
+                        <div class="column left">
+                            <p>CALORIES</p>
+                            <p>PROTEINS</p>
+                            <p>CARBS</p>
+                            <p>FATS</p>
+                            <p><b>TOTAL INTAKE</b></p>
+                        </div>
+                        <div class="column right">
+                            <p>{{ aggregated_data.total_calories|default:"0"|floatformat:2 }} kcal</p>
+                            <p>{{ aggregated_data.total_protein|default:"0"|floatformat:2 }} g</p>
+                            <p>{{ aggregated_data.total_carbs|default:"0"|floatformat:2 }} g</p>
+                            <p>{{ aggregated_data.total_fats|default:"0"|floatformat:2 }} g</p>
+                            <p><b>{{ total_consumed|floatformat:2 }} g</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+       <!-- Meal Suggestions Box -->
+<div>
+    <h2 style="color: #f4f4f4; text-align: left; font-family: 'Poppins', sans-serif;">🍽️ Recommended Meals</h2>
+    <div class="meal-suggestions">
+      {% if recommended_meals %}
+        <ul class="meal-list">
+          {% for meal in recommended_meals|slice:":5" %}
+            <li>{{ meal }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="no-meal-message">No meal suggestions available</p>
+      {% endif %}
+    </div>
+  </div>
+  
+
+        <!-- Export Options -->
+        <div class="export-options">
+         <span class="export-label" style="color: whitesmoke;">Export Statistics as:</span>
+            <a href="{% url 'generate_pdf_report' %}" class="btn export-btn">PDF</a>
+            <a href="{% url 'export_csv' %}" class="btn export-btn">CSV</a>
+          </div>
+          
+
+        <!-- Add this temporarily for debugging -->
+        {% if debug %}
+        <div style="background: white; padding: 10px; margin: 10px;">
+            <h3>Debug Info:</h3>
+            <pre>
+            Calorie Goal: {{ debug_info.calorie_goal }}
+            Protein Goal: {{ debug_info.protein_goal }}
+            Carbs Goal: {{ debug_info.carbs_goal }}
+            Fats Goal: {{ debug_info.fats_goal }}
+            </pre>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>
